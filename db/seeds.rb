@@ -5,3 +5,14 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+PRODUCTS = [
+  'Nintendo Switch',
+  'The Hobbit',
+  'Samsung Neo QLED',
+  'IPhone15'
+]
+
+PRODUCTS.each do |product|
+  Product.find_or_create_by(name: product)
+end
