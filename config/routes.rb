@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get 'all_orders' => 'orders#all_orders', as: :all_orders
+  post 'add_orders/:product_id', to: 'orders#add', as: :add_orders
 
   # Defines the root path route ("/")
   root 'products#index'
