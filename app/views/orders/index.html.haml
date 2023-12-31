@@ -3,6 +3,7 @@
   - @pending_order.each do |order|
     - order.products.each do |product|
       %p= product.name
+      %p= link_to 'Remove', remove_products_path(product), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }
     %p= link_to 'Continue shop for items', products_path
 
 - else

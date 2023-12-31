@@ -61,6 +61,23 @@ class OrdersController < ApplicationController
     end
   end
 
+  def remove
+    pending_order_sql = <<~SQL
+      SELECT * FROM orders
+      WHERE status = 'pending'
+      AND customer_id = #{current_customer.id}
+      ORDER BY ID DESC;
+    SQL
+    pending_order = Order.find_by_sql(pending_order_sql)
+
+    order_item = pending_order.first.order_items.find_by(product_id: params[:product_id])
+    if order_item.destroy
+      redirect_to orders_path, notice: 'Product was successfully removed.'
+    else
+      render :pending
+    end
+  end
+
   private
 
   def check_authorised_admin
