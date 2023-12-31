@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get 'orders' => 'orders#index', as: :orders
   get 'all_orders' => 'orders#all_orders', as: :all_orders
+  delete 'cancel_orders/:order_id' => 'orders#destroy', as: :cancel_orders
   post 'add_orders/:product_id', to: 'orders#add', as: :add_orders
   delete 'remove_product/:product_id' => 'orders#remove', as: :remove_products
 
