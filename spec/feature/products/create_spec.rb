@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 feature 'Create Product' do
-  let!(:customer) { create :customer }
-  let!(:product) { build_stubbed :product }
+  let!(:customer) { create :customer, :admin }
+  let(:product) { build_stubbed :product }
 
   before do
     sign_in customer
@@ -15,5 +15,13 @@ feature 'Create Product' do
 
     expect(page).to have_content('Product was successfully created.')
     expect(Product.find_by(name: product.name).present?).to eq(true)
+  end
+
+  context 'customer role' do
+    let!(:customer) { create :customer }
+
+    it do
+      expect(page).to have_content('You are not authorised to view this page')
+    end
   end
 end
