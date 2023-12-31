@@ -1,24 +1,14 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Version used:
+Ruby 2.7.4
+Rails 7.0.8
 
-Things you may want to cover:
+To setup:
+rails db:create && rails db:migrate && rails db:seed && rails s
 
-* Ruby version
+After setup:
+There are 2 account that can be used to get started and both password is 'password':
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- admin@example.com (Can access /all_orders and create new products)
+- customerone@example.com
