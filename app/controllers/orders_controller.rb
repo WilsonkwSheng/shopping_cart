@@ -10,6 +10,25 @@ class OrdersController < ApplicationController
     @orders = Order.find_by_sql(orders_sql)
   end
 
+  def index
+    pending_order_sql = <<~SQL
+      SELECT * FROM orders
+      WHERE status = 'pending'
+      AND customer_id = #{current_customer.id}
+      ORDER BY ID DESC;
+    SQL
+
+    paid_orders_sql = <<~SQL
+      SELECT * FROM orders
+      WHERE status = 'paid'
+      AND customer_id = #{current_customer.id}
+      ORDER BY orders.ID DESC;
+    SQL
+
+    @pending_order = Order.find_by_sql(pending_order_sql)
+    @orders = Order.find_by_sql(paid_orders_sql)
+  end
+
   def add
     pending_order_sql = <<~SQL
       SELECT * FROM orders

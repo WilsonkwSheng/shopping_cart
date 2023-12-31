@@ -1,0 +1,17 @@
+- if @pending_order.present? && @pending_order.first.products.present?
+  %h1 Current items in cart:
+  - @pending_order.each do |order|
+    - order.products.each do |product|
+      %p= product.name
+    %p= link_to 'Continue shop for items', products_path
+
+- else
+  %h1 You have no current ongoing order
+  %p
+    Click #{link_to 'here', products_path} to shop for more items
+- if @orders.present?
+  %h1 Past completed transactions:
+  - @orders.each do |order|
+    %p= "Transaction date: #{order.created_at.strftime('%e %b %Y %l:%M %P')}"
+    - order.products.each do |product|
+      %p= product.name

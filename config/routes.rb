@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :products, except: [:destroy]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  get 'orders' => 'orders#index', as: :orders
   get 'all_orders' => 'orders#all_orders', as: :all_orders
   post 'add_orders/:product_id', to: 'orders#add', as: :add_orders
 
