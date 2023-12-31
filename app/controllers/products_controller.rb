@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  before_action :check_authorised_admin, only: [:new, :create, :edit, :update]
   before_action :set_product, only: %i[ show edit update destroy ]
 
   def index
@@ -44,5 +45,11 @@ class ProductsController < ApplicationController
 
   def product_params
     params.require(:product).permit(:name)
+  end
+
+  def check_authorised_admin
+    if !current_customer.admin?
+      redirect_to root_path, flash: { error: 'You are not authorised to view this page' }
+    end
   end
 end

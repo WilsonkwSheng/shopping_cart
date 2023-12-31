@@ -1,0 +1,6 @@
+- @orders.each do |order|
+  %p= order.customer.name
+  %p= order.status
+  %p= "Transaction date: #{order.created_at.strftime('%e %b %Y %l:%M %P')}"
+  - order.products.each do |product|
+    %p= product.name
