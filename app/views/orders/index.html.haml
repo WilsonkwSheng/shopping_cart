@@ -5,6 +5,7 @@
       %p= product.name
       %p= link_to 'Remove', remove_products_path(product), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }
     %p= link_to 'Continue shop for items', products_path
+    %p= link_to "Checkout #{order.products.length} items", checkout_orders_path(order), data: { turbo_method: :post }
     %p= link_to 'Cancel order', cancel_orders_path(order), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }
 
 - else
