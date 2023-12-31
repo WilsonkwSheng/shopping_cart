@@ -36,12 +36,6 @@ class ProductsController < ApplicationController
     end
   end
 
-  def destroy
-    @product.destroy
-
-    redirect_to products_url, notice: 'Product was successfully destroyed.'
-  end
-
   private
 
   def set_product
