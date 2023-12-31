@@ -5,6 +5,8 @@
       %li
         = link_to 'View All Order', all_orders_path
     %li
+      = link_to 'My Order', orders_path
+    %li
       = link_to 'Edit profile', edit_customer_registration_path
     %li
       = link_to 'Sign out', destroy_customer_session_path, data: { turbo_method: :delete }
