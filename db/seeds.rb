@@ -20,6 +20,7 @@ end
 Customer.find_or_create_by(name: 'admin') do |customer|
   customer.email = 'admin@example.com'
   customer.password = 'password'
+  customer.role = 'admin'
 end
 
 CUSTOMERS = [
@@ -31,7 +32,6 @@ CUSTOMERS.each do |customer_name|
   customer = Customer.find_or_create_by(name: customer_name) do |customer|
     customer.email = "#{customer_name}@example.com"
     customer.password = 'password'
-    customer.role = 'admin'
   end
 end
 
