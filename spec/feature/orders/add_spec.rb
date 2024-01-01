@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-feature 'Add product to ongoing pending order' do
+feature 'Add to cart with customer ID' do
   let(:customer) { create :customer }
-  let!(:product_one) { create :product }
+  let!(:product) { create :product }
 
   before do
     sign_in customer
@@ -12,8 +12,6 @@ feature 'Add product to ongoing pending order' do
   it do
     click_on 'Add to cart'
 
-    expect(page).to have_content('Product was successfully added.')
-    order = customer.orders.find_by(status: 'pending')
-    expect(order.products.present?).to eq(true)
+    expect(page).to have_field("Enter your ID to add this product #{product.name}")
   end
 end

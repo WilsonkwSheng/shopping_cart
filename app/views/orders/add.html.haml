@@ -1,0 +1,7 @@
+= turbo_frame_tag 'confirmation_error'
+
+= form_with(url: '/confirm_order', local: true)  do |f|
+  %div= f.label :customer_id, "Enter your ID to add this product #{@product.first.name}"
+  %div= f.text_field :customer_id
+  = f.hidden_field :product_id, value: @product.first.id
+  = f.submit 'Save'

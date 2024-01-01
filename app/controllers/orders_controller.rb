@@ -30,6 +30,67 @@ class OrdersController < ApplicationController
   end
 
   def add
+    product_sql = <<~SQL
+      SELECT * FROM products
+      WHERE ID = #{params[:product_id]};
+    SQL
+    @product = Product.find_by_sql(product_sql)
+  end
+
+  def checkout
+    pending_order_sql = <<~SQL
+      SELECT * FROM orders
+      WHERE status = 'pending'
+      AND customer_id = #{current_customer.id}
+      ORDER BY ID DESC;
+    SQL
+    pending_order = Order.find_by_sql(pending_order_sql)
+
+    if pending_order.first.update(status: 'paid')
+      redirect_to orders_path, notice: 'Order was successfully paid.'
+    else
+      render :index
+    end
+  end
+
+  def destroy
+    pending_order_sql = <<~SQL
+      SELECT * FROM orders
+      WHERE status = 'pending'
+      AND customer_id = #{current_customer.id}
+      ORDER BY ID DESC;
+    SQL
+    pending_order = Order.find_by_sql(pending_order_sql)
+
+    if pending_order.first.destroy
+      redirect_to orders_path, notice: 'Order was successfully removed.'
+    else
+      render :index
+    end
+  end
+
+  def remove
+    pending_order_sql = <<~SQL
+      SELECT * FROM orders
+      WHERE status = 'pending'
+      AND customer_id = #{current_customer.id}
+      ORDER BY ID DESC;
+    SQL
+    pending_order = Order.find_by_sql(pending_order_sql)
+
+    order_item = pending_order.first.order_items.find_by(product_id: params[:product_id])
+    if order_item.destroy
+      redirect_to orders_path, notice: 'Product was successfully removed.'
+    else
+      render :index
+    end
+  end
+
+  def confirmation
+    if params[:customer_id] != current_customer.id.to_s
+      return render turbo_stream: turbo_stream.replace('confirmation_error', partial: 'error', locals: { error: 'Please enter your customer ID to continue' })
+    end
+
     pending_order_sql = <<~SQL
       SELECT * FROM orders
       WHERE status = 'pending'
@@ -57,56 +118,7 @@ class OrdersController < ApplicationController
     if order.save
       redirect_to orders_path, notice: 'Product was successfully added.'
     else
-      render :pending
-    end
-  end
-
-  def checkout
-    pending_order_sql = <<~SQL
-      SELECT * FROM orders
-      WHERE status = 'pending'
-      AND customer_id = #{current_customer.id}
-      ORDER BY ID DESC;
-    SQL
-    pending_order = Order.find_by_sql(pending_order_sql)
-
-    if pending_order.first.update(status: 'paid')
-      redirect_to orders_path, notice: 'Order was successfully paid.'
-    else
-      render :pending
-    end
-  end
-
-  def destroy
-    pending_order_sql = <<~SQL
-      SELECT * FROM orders
-      WHERE status = 'pending'
-      AND customer_id = #{current_customer.id}
-      ORDER BY ID DESC;
-    SQL
-    pending_order = Order.find_by_sql(pending_order_sql)
-
-    if pending_order.first.destroy
-      redirect_to orders_path, notice: 'Order was successfully removed.'
-    else
-      render :pending
-    end
-  end
-
-  def remove
-    pending_order_sql = <<~SQL
-      SELECT * FROM orders
-      WHERE status = 'pending'
-      AND customer_id = #{current_customer.id}
-      ORDER BY ID DESC;
-    SQL
-    pending_order = Order.find_by_sql(pending_order_sql)
-
-    order_item = pending_order.first.order_items.find_by(product_id: params[:product_id])
-    if order_item.destroy
-      redirect_to orders_path, notice: 'Product was successfully removed.'
-    else
-      render :pending
+      render turbo_stream: turbo_stream.replace('confirmation_error', partial: 'error', locals: { error: order.errors.full_messages })
     end
   end
 
