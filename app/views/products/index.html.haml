@@ -15,7 +15,6 @@
     - @products.each_with_index do |product, index|
       %tr
         %td= "#{index + 1} #{product.name}"
-        %td= link_to 'Show', product
         - if current_customer.admin?
           %td= link_to 'Edit', edit_product_path(product)
         %td= link_to 'Add to cart', add_orders_path(product)

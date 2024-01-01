@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :check_authorised_admin, only: [:new, :create, :edit, :update]
-  before_action :set_product, only: %i[ show edit update destroy ]
+  before_action :set_product, only: %i[ edit update destroy ]
 
   def index
     products_sql = <<~SQL
@@ -8,9 +8,6 @@ class ProductsController < ApplicationController
     SQL
 
     @products = Product.find_by_sql(products_sql)
-  end
-
-  def show
   end
 
   def new
