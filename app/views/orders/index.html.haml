@@ -1,12 +1,16 @@
 - if @pending_order.present? && @pending_order.first.products.present?
-  %h1 Current items in cart:
-  - @pending_order.each do |order|
-    - order.products.each do |product|
-      %p= product.name
-      %p= link_to 'Remove', remove_products_path(product), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }
-    %p= link_to 'Continue shop for items', products_path
-    %p= link_to "Checkout #{order.products.length} items", checkout_orders_path(order), data: { turbo_method: :post }
-    %p= link_to 'Cancel order', cancel_orders_path(order), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }
+  .pb-3
+    %h1 Current items in cart:
+    - @pending_order.each do |order|
+      - order.products.each_with_index do |product, index|
+        .flex
+          = "#{index + 1} #{product.name}"
+          = link_to 'Remove', remove_products_path(product), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }
+      %p= link_to 'Continue shop for items', products_path
+      .flex
+        = link_to "Checkout #{order.products.length} items", checkout_orders_path(order), data: { turbo_method: :post, turbo_confirm: 'Proceed to checkout?' }
+        |
+        = link_to 'Cancel order', cancel_orders_path(order), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }
 
 - else
   %h1 You have no current ongoing order
@@ -14,7 +18,8 @@
     Click #{link_to 'here', products_path} to shop for more items
 - if @orders.present?
   %h1 Past completed transactions:
-  - @orders.each do |order|
-    %p= "Transaction date: #{order.created_at.strftime('%e %b %Y %l:%M %P')}"
+  - @orders.each_with_index do |order, index|
+    %p= "#{index + 1} Items bought:"
     - order.products.each do |product|
-      %p= product.name
+      %p= "- #{product.name}"
+    %p.pb-3= "Transaction date: #{order.created_at.strftime('%e %b %Y %l:%M %P')}"

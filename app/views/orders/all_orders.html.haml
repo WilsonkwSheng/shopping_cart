@@ -1,6 +1,15 @@
-- @orders.each do |order|
-  %p= order.customer.name
-  %p= order.status
-  %p= "Transaction date: #{order.created_at.strftime('%e %b %Y %l:%M %P')}"
+- @orders.each_with_index do |order, index|
+  .flex
+    = "#{index + 1} Transaction date:"
+    = order.created_at.strftime('%e %b %Y %l:%M %P')
+  .flex
+    Customer name:
+    = order.customer.name
+  .flex
+    Order status:
+    = order.status
+  Items bought:
+  %ul
   - order.products.each do |product|
-    %p= product.name
+    %li= product.name
+  .pb-3
